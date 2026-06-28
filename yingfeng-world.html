@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAL-KONI // 瓦尔空伊 世界志</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ─────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg0:#080808;
+  --bg1:#111111;
+  --bg2:#1a1a1a;
+  --bg3:#222222;
+  --line:#2a2a2a;
+  --line2:#333;
+  --t1:#f0f0f0;
+  --t2:#999;
+  --t3:#555;
+  --t4:#333;
+  --acc:#f0f0f0;
+  --acc-dim:rgba(240,240,240,0.08);
+  --mono:'Share Tech Mono',monospace;
+  --sans:'Noto Sans SC',sans-serif;
+  --serif:'Noto Serif SC',serif;
+  /* phase colors */
+  --c-01:#8B5E3C;   /* 逆荒 · 棕 */
+  --c-02:#3A7D44;   /* 谐衡 · 绿 */
+  --c-03:#E8A8D8;   /* 生绘 · 淡粉 */
+  --c-04:#8B0000;   /* 死献 · 黑红 */
+  --c-05:#C9A84C;   /* 孤落 · 金 */
+  --c-06:#7B5EA7;   /* 终途 · 紫 */
+  --phase:#f0f0f0;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg0);
+  color:var(--t1);
+  font-family:var(--sans);
+  font-weight:300;
+  line-height:1.8;
+  overflow-x:hidden;
+}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg0)}
+::-webkit-scrollbar-thumb{background:var(--line2)}
+
+/* ── SCAN LINE OVERLAY ─────────────────────────── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);
+  pointer-events:none;z-index:9999;
+}
+
+/* ── NAV ───────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(8,8,8,.95);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem 2.5rem;
+  backdrop-filter:blur(8px);
+}
+.nav-id{
+  font-family:var(--mono);
+  font-size:.75rem;color:var(--t2);
+  letter-spacing:.15em;
+}
+.nav-id span{color:var(--acc);margin-right:.5rem}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{
+  font-family:var(--mono);font-size:.7rem;
+  color:var(--t3);text-decoration:none;
+  letter-spacing:.2em;text-transform:uppercase;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--t1)}
+.nav-edit-btn{
+  font-family:var(--mono);font-size:.7rem;
+  background:none;border:1px solid var(--line2);
+  color:var(--t3);padding:.35rem .9rem;
+  cursor:pointer;letter-spacing:.15em;
+  transition:all .2s;
+  clip-path:polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px);
+}
+.nav-edit-btn:hover{border-color:var(--t1);color:var(--t1)}
+.nav-edit-btn.active{border-color:var(--phase);color:var(--phase)}
+
+/* ── CLIP-PATH CORNERS ─────────────────────────── */
+.clip-sm{clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
+.clip-md{clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)}
+.clip-lg{clip-path:polygon(20px 0,100% 0,100% calc(100% - 20px),calc(100% - 20px) 100%,0 100%,0 20px)}
+
+/* ── HERO ──────────────────────────────────────── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  padding-top:4rem;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--line) 1px,transparent 1px),
+    linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:60px 60px;
+  opacity:.4;
+}
+.hero-glow{
+  position:absolute;
+  width:600px;height:600px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(240,240,240,.04) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  animation:pulse 6s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.5}50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:800px;padding:2rem}
+.hero-sys{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--t3);letter-spacing:.4em;
+  margin-bottom:2rem;
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+}
+.hero-sys::before,.hero-sys::after{content:'';width:40px;height:1px;background:var(--line2)}
+.hero-title{
+  font-family:var(--mono);
+  font-size:clamp(2.5rem,7vw,5.5rem);
+  font-weight:400;
+  color:var(--t1);
+  letter-spacing:.08em;
+  line-height:1.1;
+  margin-bottom:.5rem;
+}
+.hero-title-cn{
+  font-family:var(--serif);
+  font-size:clamp(1rem,2.5vw,1.6rem);
+  color:var(--t2);
+  letter-spacing:.5em;
+  margin-bottom:2rem;
+}
+.hero-desc{
+  font-size:.88rem;color:var(--t2);
+  line-height:2;max-width:520px;margin:0 auto 3rem;
+  border-left:1px solid var(--line2);
+  padding-left:1.5rem;text-align:left;
+}
+.hero-stats{
+  display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;
+}
+.hero-stat{
+  font-family:var(--mono);font-size:.7rem;
+  color:var(--t3);letter-spacing:.1em;
+  display:flex;flex-direction:column;gap:.2rem;
+}
+.hero-stat span{color:var(--t1);font-size:1.1rem}
+
+/* ── SECTION WRAPPER ───────────────────────────── */
+.sec{
+  position:relative;z-index:1;
+  max-width:1080px;margin:0 auto;
+  padding:5rem 2rem;
+}
+.sec-head{
+  display:flex;align-items:flex-start;
+  gap:1.5rem;margin-bottom:3rem;
+}
+.sec-num{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--t3);letter-spacing:.2em;
+  padding-top:.15rem;
+  white-space:nowrap;
+}
+.sec-title{
+  font-family:var(--mono);font-size:clamp(1.1rem,2.5vw,1.4rem);
+  color:var(--t1);letter-spacing:.2em;text-transform:uppercase;
+}
+.sec-sub{font-size:.8rem;color:var(--t3);letter-spacing:.1em;margin-top:.3rem}
+.h-rule{
+  width:100%;height:1px;
+  background:linear-gradient(to right,var(--line2),transparent);
+  margin:5rem 0 0;
+}
+
+/* ── WORLD CARDS ───────────────────────────────── */
+.world-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+.world-card{
+  background:var(--bg1);
+  padding:2rem;
+  transition:background .2s;
+}
+.world-card:hover{background:var(--bg2)}
+.wc-tag{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--t3);letter-spacing:.25em;
+  text-transform:uppercase;margin-bottom:.8rem;
+}
+.wc-title{
+  font-family:var(--sans);font-size:1rem;font-weight:500;
+  color:var(--t1);margin-bottom:.8rem;
+}
+.wc-body{font-size:.84rem;color:var(--t2);line-height:1.9}
+.world-card.span2{grid-column:span 2}
+
+/* ── MIRACLES ──────────────────────────────────── */
+.miracle-row{
+  display:grid;grid-template-columns:120px 1fr;
+  border-bottom:1px solid var(--line);
+  padding:1.5rem 0;gap:2rem;align-items:start;
+  transition:background .2s;
+}
+.miracle-row:hover{background:var(--bg1);padding-left:.5rem;padding-right:.5rem;margin:0 -.5rem}
+.miracle-row:first-child{border-top:1px solid var(--line)}
+.mr-year{
+  font-family:var(--mono);font-size:.72rem;
+  color:var(--t3);letter-spacing:.1em;padding-top:.2rem;
+}
+.mr-name{
+  font-family:var(--sans);font-size:.95rem;font-weight:500;
+  color:var(--t1);margin-bottom:.4rem;
+}
+.mr-body{font-size:.83rem;color:var(--t2);line-height:1.9}
+
+/* ── NATIONS GRID ──────────────────────────────── */
+.nations-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--line);
+}
+.nation-card{
+  background:var(--bg1);padding:1.5rem;
+  cursor:pointer;transition:background .2s;
+  position:relative;
+}
+.nation-card:hover{background:var(--bg2)}
+.nation-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--t1);opacity:0;transition:opacity .2s;
+}
+.nation-card:hover::before{opacity:1}
+.nc-name{
+  font-family:var(--sans);font-size:1rem;font-weight:500;
+  color:var(--t1);margin-bottom:.3rem;
+}
+.nc-tag{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--t3);letter-spacing:.15em;
+  margin-bottom:.8rem;display:block;
+}
+.nc-body{font-size:.8rem;color:var(--t2);line-height:1.8}
+
+/* ── MODAL ─────────────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.85);z-index:300;
+  align-items:center;justify-content:center;padding:2rem;
+}
+.modal-overlay.open{display:flex}
+.modal-box{
+  background:var(--bg1);
+  border:1px solid var(--line2);
+  max-width:600px;width:100%;
+  max-height:80vh;overflow-y:auto;
+  padding:2.5rem;position:relative;
+  animation:modal-in .2s ease;
+  clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px);
+}
+@keyframes modal-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.modal-close{
+  position:absolute;top:1.2rem;right:1.5rem;
+  background:none;border:none;color:var(--t3);
+  font-size:1.2rem;cursor:pointer;font-family:var(--mono);
+}
+.modal-close:hover{color:var(--t1)}
+.modal-name{
+  font-family:var(--serif);font-size:1.5rem;
+  color:var(--t1);margin-bottom:.3rem;
+}
+.modal-gov{
+  font-family:var(--mono);font-size:.65rem;
+  color:var(--t3);letter-spacing:.2em;margin-bottom:1.5rem;
+}
+.modal-body{font-size:.86rem;color:var(--t2);line-height:2}
+.modal-body p{margin-bottom:.8rem}
+.modal-label{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--t3);letter-spacing:.25em;
+  text-transform:uppercase;margin-top:1.2rem;margin-bottom:.3rem;
+}
+.modal-val{font-size:.88rem;color:var(--t1)}
+
+/* ── PHASE SYSTEM ──────────────────────────────── */
+.phase-tabs{
+  display:flex;gap:0;
+  border:1px solid var(--line2);
+  margin-bottom:2.5rem;
+  overflow:hidden;
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+}
+.phase-tab{
+  flex:1;padding:.7rem .5rem;
+  background:var(--bg1);border:none;
+  border-right:1px solid var(--line);
+  color:var(--t3);font-family:var(--mono);
+  font-size:.65rem;letter-spacing:.1em;
+  cursor:pointer;transition:all .25s;
+  line-height:1.4;text-align:center;
+}
+.phase-tab:last-child{border-right:none}
+.phase-tab:hover{background:var(--bg2);color:var(--t2)}
+.phase-tab.active{
+  background:var(--phase-bg, var(--bg3));
+  color:var(--phase);
+  border-bottom:2px solid var(--phase);
+}
+.phase-panel{display:none}
+.phase-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+
+/* phase accent wrappers */
+.phase-panel.p01{--phase:#8B5E3C;--phase-bg:rgba(139,94,60,.08)}
+.phase-panel.p02{--phase:#3A7D44;--phase-bg:rgba(58,125,68,.08)}
+.phase-panel.p03{--phase:#E8A8D8;--phase-bg:rgba(232,168,216,.08)}
+.phase-panel.p04{--phase:#8B0000;--phase-bg:rgba(139,0,0,.1)}
+.phase-panel.p05{--phase:#C9A84C;--phase-bg:rgba(201,168,76,.08)}
+.phase-panel.p06{--phase:#7B5EA7;--phase-bg:rgba(123,94,167,.08)}
+
+/* active tab color by index — set via JS */
+.phase-block{
+  background:var(--bg1);
+  padding:2rem;
+}
+.phase-block.span2{grid-column:span 2}
+.pb-label{
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--phase,var(--t3));letter-spacing:.25em;
+  text-transform:uppercase;margin-bottom:.5rem;
+}
+.pb-title{
+  font-family:var(--serif);font-size:1.6rem;
+  color:var(--t1);margin-bottom:1rem;
+}
+.pb-quote{
+  font-size:.85rem;color:var(--t2);
+  border-left:2px solid var(--phase,var(--line2));
+  padding-left:1rem;line-height:2;
+  margin-bottom:1rem;font-style:italic;
+}
+.pb-story{font-size:.85rem;color:var(--t2);line-height:2}
+.stat-row{
+  display:flex;justify-content:space-between;
+  padding:.5rem 0;
+  border-bottom:1px solid var(--line);
+  font-size:.83rem;
+}
+.stat-row:last-child{border-bottom:none}
+.stat-label{color:var(--t3);font-family:var(--mono);font-size:.72rem;letter-spacing:.1em}
+.stat-val{color:var(--t1)}
+.ability-item{
+  display:flex;gap:.8rem;
+  padding:.55rem 0;border-bottom:1px solid var(--line);
+  font-size:.83rem;align-items:flex-start;
+}
+.ability-item:last-child{border-bottom:none}
+.ability-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--phase,var(--t3));
+  margin-top:.55rem;flex-shrink:0;
+}
+.ability-text{color:var(--t2);line-height:1.8}
+.ability-name{color:var(--t1);font-weight:500}
+.weapon-name{
+  font-family:var(--mono);font-size:.75rem;
+  color:var(--phase,var(--t3));letter-spacing:.1em;
+  border:1px solid var(--phase,var(--line2));
+  display:inline-block;padding:.25rem .7rem;margin-bottom:.7rem;
+  clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);
+}
+
+/* ── TIMELINE ──────────────────────────────────── */
+.timeline{position:relative;padding-left:2.5rem}
+.timeline::before{
+  content:'';position:absolute;left:.25rem;top:0;bottom:0;
+  width:1px;background:linear-gradient(to bottom,transparent,var(--line2),transparent);
+}
+.tl-item{position:relative;margin-bottom:2rem}
+.tl-dot{
+  position:absolute;left:-2.35rem;top:.45rem;
+  width:8px;height:8px;border:1px solid var(--line2);
+  background:var(--bg0);
+}
+.tl-year{
+  font-family:var(--mono);font-size:.7rem;
+  color:var(--t3);letter-spacing:.15em;margin-bottom:.3rem;
+}
+.tl-text{font-size:.85rem;color:var(--t2);line-height:1.9}
+
+/* ── EDIT MODE ─────────────────────────────────── */
+.edit-mode [contenteditable]{
+  outline:1px dashed rgba(240,240,240,.2);
+  cursor:text;
+  min-height:1em;
+}
+.edit-mode [contenteditable]:focus{
+  outline:1px solid var(--phase,var(--t1));
+  background:rgba(255,255,255,.02);
+}
+.img-upload-btn{
+  display:none;
+  font-family:var(--mono);font-size:.65rem;
+  background:var(--bg2);border:1px solid var(--line2);
+  color:var(--t3);padding:.4rem .8rem;
+  cursor:pointer;margin-top:.5rem;
+  clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);
+  letter-spacing:.1em;
+}
+.img-upload-btn:hover{border-color:var(--t1);color:var(--t1)}
+.edit-mode .img-upload-btn{display:inline-block}
+.edit-mode .img-slot{
+  border:1px dashed var(--line2);
+  min-height:100px;display:flex;
+  align-items:center;justify-content:center;
+  color:var(--t3);font-family:var(--mono);font-size:.7rem;
+  cursor:pointer;transition:border-color .2s;
+}
+.edit-mode .img-slot:hover{border-color:var(--t1)}
+.img-slot img{width:100%;height:auto;display:block}
+.edit-toolbar{
+  display:none;
+  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+  background:var(--bg2);border:1px solid var(--line2);
+  padding:.6rem 1.2rem;z-index:400;
+  font-family:var(--mono);font-size:.65rem;color:var(--t3);
+  letter-spacing:.15em;gap:1.5rem;align-items:center;
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+}
+.edit-mode .edit-toolbar{display:flex}
+.et-btn{
+  background:none;border:none;color:var(--t3);
+  cursor:pointer;font-family:var(--mono);font-size:.65rem;
+  letter-spacing:.1em;padding:.2rem .5rem;
+  transition:color .2s;
+}
+.et-btn:hover{color:var(--t1)}
+.et-save{color:var(--t1)}
+.et-status{color:var(--t3);font-size:.6rem}
+
+/* ── FOOTER ────────────────────────────────────── */
+footer{
+  border-top:1px solid var(--line);
+  padding:2.5rem 2.5rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.ft-id{font-family:var(--mono);font-size:.65rem;color:var(--t3);letter-spacing:.2em}
+.ft-copy{font-family:var(--mono);font-size:.6rem;color:var(--t4);letter-spacing:.1em}
+
+/* ── SWIPE HINT ────────────────────────────────── */
+.swipe-hint{
+  display:none;text-align:center;
+  font-family:var(--mono);font-size:.6rem;
+  color:var(--t3);letter-spacing:.15em;
+  margin-bottom:.8rem;padding:.3rem;
+  border:1px solid var(--line);
+}
+
+/* ── MOBILE ────────────────────────────────────── */
+@media(max-width:768px){
+  nav{padding:.8rem 1.2rem}
+  .nav-links{display:none}
+  .nav-id{font-size:.6rem}
+
+  .mob-nav{
+    display:flex;
+    position:fixed;bottom:0;left:0;right:0;z-index:250;
+    background:rgba(8,8,8,.97);
+    border-top:1px solid var(--line);
+    justify-content:space-around;
+    padding:.7rem 0 calc(.7rem + env(safe-area-inset-bottom));
+  }
+  .mob-nav a{
+    font-family:var(--mono);font-size:.5rem;color:var(--t3);
+    text-decoration:none;letter-spacing:.08em;
+    text-align:center;display:flex;flex-direction:column;gap:.2rem;
+  }
+  .mob-nav a:active{color:var(--t1)}
+  .mob-nav-icon{font-size:.95rem}
+
+  .hero{min-height:100svh;padding:5rem 1.2rem 5rem}
+  .hero-title{font-size:2.6rem}
+  .hero-title-cn{font-size:.95rem;letter-spacing:.25em}
+  .hero-desc{font-size:.8rem;padding-left:1rem}
+  .hero-stats{gap:1rem}
+  .hero-stat{font-size:.6rem}
+  .hero-grid{background-size:40px 40px}
+
+  .sec{padding:3rem 1.2rem 6rem}
+  .sec-title{font-size:.95rem}
+
+  .world-grid{grid-template-columns:1fr}
+  .world-card.span2{grid-column:span 1}
+
+  .miracle-row{grid-template-columns:52px 1fr;gap:.8rem}
+
+  .nations-grid{
+    display:flex;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    gap:1px;background:transparent;
+    padding-bottom:.5rem;
+    scrollbar-width:none;
+  }
+  .nations-grid::-webkit-scrollbar{display:none}
+  .nation-card{
+    min-width:78vw;flex-shrink:0;
+    scroll-snap-align:start;
+    background:var(--bg1);
+    border:1px solid var(--line);
+  }
+  .swipe-hint{display:block}
+
+  .phase-tabs{
+    overflow-x:auto;scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    clip-path:none;scrollbar-width:none;
+  }
+  .phase-tabs::-webkit-scrollbar{display:none}
+  .phase-tab{
+    min-width:30vw;flex-shrink:0;
+    scroll-snap-align:start;
+    font-size:.58rem;padding:.6rem .3rem;
+  }
+
+  .phase-panel.active{grid-template-columns:1fr}
+  .phase-block.span2{grid-column:span 1}
+
+  .modal-overlay{padding:1rem}
+  .modal-box{padding:1.5rem;clip-path:none;max-height:88vh}
+
+  footer{flex-direction:column;gap:.4rem;text-align:center;padding:2rem 1.2rem 5rem}
+
+  .edit-toolbar{
+    bottom:4.5rem;flex-wrap:wrap;
+    justify-content:center;gap:.6rem;padding:.7rem 1rem;
+  }
+}
+
+@media(max-width:420px){
+  .hero-title{font-size:2rem}
+  .nation-card{min-width:88vw}
+  .phase-tab{min-width:38vw}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-id"><span>//</span>VAL-KONI · SYS.ARCHIVE</div>
+  <ul class="nav-links">
+    <li><a href="#world">WORLD</a></li>
+    <li><a href="#miracles">MIRACLES</a></li>
+    <li><a href="#nations">NATIONS</a></li>
+    <li><a href="#yingfeng">YF-UNIT</a></li>
+    <li><a href="#timeline">CHRONO</a></li>
+  </ul>
+  <button class="nav-edit-btn" id="editToggle" onclick="toggleEdit()">[ EDIT ]</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-sys">SYS:ACTIVE // ARCHIVE v4.0</div>
+    <h1 class="hero-title">VAL-KONI</h1>
+    <div class="hero-title-cn">瓦尔空伊</div>
+    <p class="hero-desc" contenteditable="false">
+      在这颗拥有两颗卫星的星球上，科技与法术的碰撞已逾千年。
+      每十年诞生的术零，是神明的馈赠，亦是文明恐惧的根源。
+      而在这一切之中，有一个人，在荒漠的黑暗中死去，又在晶体的微光里重生。
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span>02</span>卫星</div>
+      <div class="hero-stat"><span>10Y</span>术零周期</div>
+      <div class="hero-stat"><span>08</span>已记录奇迹</div>
+      <div class="hero-stat"><span>15</span>国家 / 地区</div>
+      <div class="hero-stat"><span>06</span>映锋阶段</div>
+    </div>
+  </div>
+</div>
+
+<div class="h-rule"></div>
+
+<!-- WORLD -->
+<section class="sec" id="world">
+  <div class="sec-head">
+    <div class="sec-num">// 01</div>
+    <div>
+      <div class="sec-title">星球与生灵</div>
+      <div class="sec-sub">PLANET · SPECIES · SYSTEM</div>
+    </div>
+  </div>
+
+  <!-- 图片区 -->
+  <div class="img-slot" id="img-world" onclick="triggerImgUpload('img-world')" style="margin-bottom:1px;height:220px;background:var(--bg1)">
+    <span>+ 点击插入图片</span>
+  </div>
+  <button class="img-upload-btn" onclick="triggerImgUpload('img-world')">插入图片</button>
+  <input type="file" id="file-img-world" accept="image/*" style="display:none" onchange="handleImg(this,'img-world')">
+
+  <div class="world-grid" style="margin-top:1px">
+    <div class="world-card">
+      <div class="wc-tag">// PLANET</div>
+      <div class="wc-title">星球 · 瓦尔空伊</div>
+      <div class="wc-body" contenteditable="false">拥有两颗卫星的星球。一号卫星内斯尔疑藏有改变月都历史的秘密；二号卫星杜莱登表面为液态海洋，海底藏有科研设备无法探测的古文明遗迹。</div>
+    </div>
+    <div class="world-card">
+      <div class="wc-tag">// SPECIES · A</div>
+      <div class="wc-title">人类</div>
+      <div class="wc-body" contenteditable="false">称霸星球的生物，凭借超高智商与团队协作能力主宰文明。对法术的恐惧与觊觎，驱动着整个世界的历史走向。</div>
+    </div>
+    <div class="world-card">
+      <div class="wc-tag">// SPECIES · B</div>
+      <div class="wc-title">亚人</div>
+      <div class="wc-body" contenteditable="false">由人类创造的实验生物，具有动物特征。体格比人类更强壮，寿命更长，但普遍存在本能兽性冲动与智力局限。同样可在极端情况下觉醒成为术零，但概率更低。</div>
+    </div>
+    <div class="world-card">
+      <div class="wc-tag">// SPECIES · C</div>
+      <div class="wc-title">术零</div>
+      <div class="wc-body" contenteditable="false">觉醒法术的人类之统称。"法术的存在为零——需要立刻消灭"。平均每十年诞生一位，在强烈的极端情绪下觉醒。其出现伴随着光芒绕身，寿命得到延长。少数在极端情况下会引发毁灭级的"奇迹"现象。</div>
+    </div>
+  </div>
+</section>
+
+<div class="h-rule"></div>
+
+<!-- MIRACLES -->
+<section class="sec" id="miracles">
+  <div class="sec-head">
+    <div class="sec-num">// 02</div>
+    <div>
+      <div class="sec-title">已记录奇迹</div>
+      <div class="sec-sub">MIRACLE · ARCHIVE</div>
+    </div>
+  </div>
+
+  <div class="img-slot" id="img-miracle" onclick="triggerImgUpload('img-miracle')" style="height:180px;background:var(--bg1);margin-bottom:1rem">
+    <span>+ 点击插入图片</span>
+  </div>
+  <button class="img-upload-btn" onclick="triggerImgUpload('img-miracle')">插入图片</button>
+  <input type="file" id="file-img-miracle" accept="image/*" style="display:none" onchange="handleImg(this,'img-miracle')">
+
+  <div id="miracle-list">
+    <div class="miracle-row">
+      <div class="mr-year">2158</div>
+      <div>
+        <div class="mr-name" contenteditable="false">奇迹 · 灰色国度</div>
+        <div class="mr-body" contenteditable="false">隆卡索国术零被杀害时爆发的法术，永久改变了周边数千公里环境。天空永不放晴，灰色雨水接触任何生物即引发病变腐烂，但接触无机物会立刻变为普通雨水。此地成为无人敢踏足之禁区，亦是国家灭亡之根源。</div>
+      </div>
+    </div>
+    <div class="miracle-row">
+      <div class="mr-year">2377</div>
+      <div>
+        <div class="mr-name" contenteditable="false">奇迹 · 未知裂缝</div>
+        <div class="mr-body" contenteditable="false">一位术零为躲避追杀创造出的裂缝，踏入后音讯全无。此后踏入的科研人员与探险者亦无一生还，生死不明。裂缝至今静静存在，夫卡音涅国凭此奇迹改写国运。</div>
+      </div>
+    </div>
+    <div class="miracle-row">
+      <div class="mr-year">2656</div>
+      <div>
+        <div class="mr-name" contenteditable="false">奇迹 · 胧紫沉眠之茧</div>
+        <div class="mr-body" contenteditable="false">一位术零沉睡于巨大紫色囊泡中。攻击者会被反射的囊孢命中，身上生长出膜状物体，直至将人完整包裹，化为新的茧。庇斯国以此奇迹为核威慑。</div>
+      </div>
+    </div>
+    <div class="miracle-row">
+      <div class="mr-year">2938</div>
+      <div>
+        <div class="mr-name" contenteditable="false">奇迹 · 永不停歇的分裂</div>
+        <div class="mr-body" contenteditable="false">术零死于对死亡的极度恐惧时，身躯化为胶状物质。感知到恐惧的生物会被爬上包裹，发出哀嚎，随后胶状物质分裂复制，继续寻找下一个恐惧者。穆尼洛索国因此灭亡，现被月都科技穹顶封锁。</div>
+      </div>
+    </div>
+    <div class="miracle-row">
+      <div class="mr-year">3346</div>
+      <div>
+        <div class="mr-name" contenteditable="false">奇迹 · 空无</div>
+        <div class="mr-body" contenteditable="false">直面虚无后无法承受而自杀的术零所留。踏入领域的有智慧生物会逐渐对现实感到无意义，丧失感知欲望，最终沦为无灵魂的空壳。</div>
+      </div>
+    </div>
+    <div class="miracle-row">
+      <div class="mr-year">3480</div>
+      <div>
+        <div class="mr-name" contenteditable="false">奇迹 · 铁幕</div>
+        <div class="mr-body" contenteditable="false">不知名术零所留，位于奇迹空无附近。踏入者将陷入对自身法术、信仰、道德的无穷自我拷问，唯有完成逻辑自洽才能安全退出，否则理智永恒死锁。仅无知婴儿或完全失去理智者可全身而退。</div>
+      </div>
+    </div>
+    <div class="miracle-row">
+      <div class="mr-year">4040</div>
+      <div>
+        <div class="mr-name" contenteditable="false">奇迹 · 树</div>
+        <div class="mr-body" contenteditable="false">"源"部落术零耗尽生命创造的参天巨树，初衷是让世界回归自然。然而巨树反而破坏了生态，其金色果实可治百病，但食用者一年后会皮肤硬化、长出枝桠，最终变成人形树木，继续蔓延。</div>
+      </div>
+    </div>
+    <div class="miracle-row">
+      <div class="mr-year">???</div>
+      <div>
+        <div class="mr-name" contenteditable="false">反奇迹 · 灿烂绽晶</div>
+        <div class="mr-body" contenteditable="false">源自一枚微小水晶种子，可以指数级速度同化整个星球。空气中充满接触即绽放为花朵状利刃的晶体尘，地平线上的璀璨晶刺将平等地刺穿大部分人类。这是某人为了建立术零与人类共存世界而准备的终极手段。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="h-rule"></div>
+
+<!-- NATIONS -->
+<section class="sec" id="nations">
+  <div class="sec-head">
+    <div class="sec-num">// 03</div>
+    <div>
+      <div class="sec-title">列国档案</div>
+      <div class="sec-sub">NATIONS · DATABASE</div>
+    </div>
+  </div>
+  <p class="swipe-hint">← 左右滑动浏览国度 →</p>
+  <div class="nations-grid">
+    <div class="nation-card" onclick="openModal('moon')">
+      <div class="nc-name">月都</div>
+      <span class="nc-tag">// 技术精英专政</span>
+      <div class="nc-body">星球最尖端科技之国，千年来研究术零尸体与奇迹。"真理优先于民意，效率优先于情感。"唯一曾登陆内斯尔卫星的国家。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('war')">
+      <div class="nc-name">索里克兰</div>
+      <span class="nc-tag">// 军武神权共和</span>
+      <div class="nc-body">最好战的国家，哪里有战争哪里就有他们。社会地位完全由战功决定，无永久盟友，只有永久战场。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('gold')">
+      <div class="nc-name">艾克斯</div>
+      <span class="nc-tag">// 金融霸权共和</span>
+      <div class="nc-body">世界最富裕国家，历经多次经济危机却总以难以想象的手段化险为夷，坊间传言国主是不老术零。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('nature')">
+      <div class="nc-name">源木</div>
+      <span class="nc-tag">// 自然神权部落</span>
+      <div class="nc-body">拒绝知识与文明，信仰自然，追求融入生态循环的圆满。一位叛徒术零毁灭了整片森林，使其成为流浪的自然宗教共同体。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('fuka')">
+      <div class="nc-name">夫卡音涅</div>
+      <span class="nc-tag">// 温和中立神权</span>
+      <div class="nc-body">实力不强的小国，凭借境内的"奇迹·未知裂缝"使各大国不得不寻求合作，改写国命。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('lieyang')">
+      <div class="nc-name">烈阳</div>
+      <span class="nc-tag">// 国际共管傀儡</span>
+      <div class="nc-body">多国共建的猎杀组织，唯一目的是第一时间抹杀诞生的术零。目前是第九代烈阳。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('mihe')">
+      <div class="nc-name">弥藿</div>
+      <span class="nc-tag">// 君主立宪·结界庇护</span>
+      <div class="nc-body">表面普通，被前代术零国主的记忆结界笼罩。世界上唯一术零可以光明正大生活的国度。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('valune')">
+      <div class="nc-name">瓦伦尔</div>
+      <span class="nc-tag">// 奇迹督军制</span>
+      <div class="nc-body">奇迹·空无与铁幕的诞生地，与月都深度合作，同时向极度危险的渊穹派驻研究人员，每年大量人员死亡。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('bis')">
+      <div class="nc-name">庇斯</div>
+      <span class="nc-tag">// 强力君主集权</span>
+      <div class="nc-body">夹在月都与艾克斯之间，以境内"奇迹·胧紫沉眠之茧"为核威慑，在两强阴影中艰难求存。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('rosbi')">
+      <div class="nc-name">罗斯比棱</div>
+      <span class="nc-tag">// 大陆群岛联邦</span>
+      <div class="nc-body">世界中心贸易转交节点，一半群岛一半大陆，承担监视第九烈阳的国际职责。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('zanshang')">
+      <div class="nc-name">灿尚</div>
+      <span class="nc-tag">// 温和共和·理想国</span>
+      <div class="nc-body">全世界唯一支持术零权益的国家，被各国厌恶却不敢灭——需要它在大灾难来临时冲在最前线牺牲。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('sahuang')">
+      <div class="nc-name">萨荒</div>
+      <span class="nc-tag">// 纯暴力独裁</span>
+      <div class="nc-body">弱小者将被强制驱逐或处死的国家，比索里克兰更野蛮极端，科技落后使肉体暴力成为唯一权力语言。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('beiyuji')">
+      <div class="nc-name">悲雨季</div>
+      <span class="nc-tag">// 奇迹废弃地</span>
+      <div class="nc-body">原名隆卡索，因奇迹·灰色国度而灭国。现为无政府废弃地，仅有零散村落与月都科研站驻扎于边缘。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('muniluosuo')">
+      <div class="nc-name">穆尼洛索</div>
+      <span class="nc-tag">// 已灭国·封锁遗址</span>
+      <div class="nc-body">奇迹·永不停歇的分裂的发生地，已灭国。全境被月都科技穹顶封锁，灿尚担任监视第一道防线。</div>
+    </div>
+    <div class="nation-card" onclick="openModal('taoyuan')">
+      <div class="nc-name">桃源境</div>
+      <span class="nc-tag">// 精神世界·乌托邦</span>
+      <div class="nc-body">由奇点·万物梦构筑的精神世界，完美乌托邦亦是完美囚笼。现实一天等于境内一年。</div>
+    </div>
+  </div>
+</section>
+
+<div class="h-rule"></div>
+
+<!-- YINGFENG -->
+<section class="sec" id="yingfeng">
+  <div class="sec-head">
+    <div class="sec-num">// 04</div>
+    <div>
+      <div class="sec-title">映锋 // UNIT-YF</div>
+      <div class="sec-sub">CHARACTER ARCHIVE · 6 PHASES</div>
+    </div>
+  </div>
+
+  <!-- phase image slot -->
+  <div class="img-slot" id="img-phase-global" onclick="triggerImgUpload('img-phase-global')" style="height:200px;background:var(--bg1);margin-bottom:1rem">
+    <span>+ 插入角色总览图片</span>
+  </div>
+  <button class="img-upload-btn" onclick="triggerImgUpload('img-phase-global')">插入图片</button>
+  <input type="file" id="file-img-phase-global" accept="image/*" style="display:none" onchange="handleImg(this,'img-phase-global')">
+
+  <!-- TABS -->
+  <p class="swipe-hint">← 左右滑动切换阶段 →</p>
+  <div class="phase-tabs" id="phaseTabs">
+    <button class="phase-tab active" onclick="switchPhase(0)" style="--phase:#8B5E3C">逆荒<br>PHASE·01</button>
+    <button class="phase-tab" onclick="switchPhase(1)" style="--phase:#3A7D44">谐衡<br>PHASE·02</button>
+    <button class="phase-tab" onclick="switchPhase(2)" style="--phase:#E8A8D8">生绘<br>PHASE·03</button>
+    <button class="phase-tab" onclick="switchPhase(3)" style="--phase:#8B0000">死献<br>PHASE·04</button>
+    <button class="phase-tab" onclick="switchPhase(4)" style="--phase:#C9A84C">孤落<br>PHASE·05</button>
+    <button class="phase-tab" onclick="switchPhase(5)" style="--phase:#7B5EA7">终途<br>PHASE·06</button>
+  </div>
+
+  <!-- PHASE 01 逆荒 -->
+  <div class="phase-panel p01 active" id="pp0">
+    <div class="phase-block span2">
+      <div class="pb-label">// PHASE · 01 · 逆荒</div>
+      <div class="pb-title" contenteditable="false">逆荒</div>
+      <div class="pb-quote" contenteditable="false">在烈日灼晒下，他深知自己只剩下了几天的时间。看着往日自己引以为傲的肌肉身躯在这几天的求生下已经开始逐渐虚弱、消瘦……</div>
+      <div class="pb-story" contenteditable="false">曾经是某国最引以为傲的军人之一，在一次战争过后背负莫须有的罪名，被迫脱去军装独自流放荒漠。在死亡边缘徘徊之时，他发现了一处洞口——也许是一线生机，也许是通往命运转折的入口。他拒绝了如何与"死亡"和解。</div>
+      <div class="img-slot" id="img-p0" onclick="triggerImgUpload('img-p0')" style="margin-top:1rem;height:160px"><span>+ 插入此阶段图片</span></div>
+      <button class="img-upload-btn" onclick="triggerImgUpload('img-p0')">插入图片</button>
+      <input type="file" id="file-img-p0" accept="image/*" style="display:none" onchange="handleImg(this,'img-p0')">
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 基本数据</div>
+      <div class="stat-row"><span class="stat-label">HEIGHT</span><span class="stat-val">198 cm</span></div>
+      <div class="stat-row"><span class="stat-label">WEIGHT</span><span class="stat-val">347 kg</span></div>
+      <div class="stat-row"><span class="stat-label">RACE</span><span class="stat-val">人类（流放者）</span></div>
+      <div class="stat-row"><span class="stat-label">STATUS</span><span class="stat-val">无法术</span></div>
+      <div class="stat-row"><span class="stat-label">IDENTITY</span><span class="stat-val">前军人</span></div>
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 武器</div>
+      <div class="weapon-name">简易手枪</div>
+      <div style="font-size:.83rem;color:var(--t2);line-height:1.9" contenteditable="false">遭到流放时监督者给予的防身武器，彼此都知道它无法让人在荒漠中生存，但这是他仅有的一切。</div>
+    </div>
+  </div>
+
+  <!-- PHASE 02 谐衡 -->
+  <div class="phase-panel p02" id="pp1">
+    <div class="phase-block span2">
+      <div class="pb-label">// PHASE · 02 · 谐衡</div>
+      <div class="pb-title" contenteditable="false">谐衡</div>
+      <div class="pb-quote" contenteditable="false">有时映锋会静静地看着自己亲手培育的淡绿百合随风摇曳，午后的暖阳洒在他的身上一切都是如此惬意，自己的初愿此刻短暂地为花驻足。</div>
+      <div class="pb-story" contenteditable="false">在黑暗深窟中被晶体巨刺贯穿而死，却在绿色光芒中重生，带着翻倍的肌肉与全新的法术。爬出洞窟，踏上新的旅途，因救助他人而获赠日常服装。他学会了如何与"世界"共存。</div>
+      <div class="img-slot" id="img-p1" onclick="triggerImgUpload('img-p1')" style="margin-top:1rem;height:160px"><span>+ 插入此阶段图片</span></div>
+      <button class="img-upload-btn" onclick="triggerImgUpload('img-p1')">插入图片</button>
+      <input type="file" id="file-img-p1" accept="image/*" style="display:none" onchange="handleImg(this,'img-p1')">
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 基本数据</div>
+      <div class="stat-row"><span class="stat-label">HEIGHT</span><span class="stat-val">198 cm</span></div>
+      <div class="stat-row"><span class="stat-label">WEIGHT</span><span class="stat-val">347 kg</span></div>
+      <div class="stat-row"><span class="stat-label">RACE</span><span class="stat-val">术零（觉醒）</span></div>
+      <div class="stat-row"><span class="stat-label">IDENTITY</span><span class="stat-val">雇佣兵 · 工程师</span></div>
+      <div class="stat-row"><span class="stat-label">SKILL</span><span class="stat-val">璀璨结晶树</span></div>
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 法术 · 塑生晶体</div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">无触结晶</span> — 只需知晓目标位置即可施法</div></div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">形态自由</span> — 可随意塑造晶体外形</div></div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">指令刻入</span> — 结晶时写入指令，使晶体自行同化、保护或引爆</div></div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">限制</span> — 只能作用于无生命体</div></div>
+    </div>
+    <div class="phase-block span2">
+      <div class="pb-label">// 武器</div>
+      <div class="weapon-name">簇生近战工程锤</div>
+      <div style="font-size:.83rem;color:var(--t2);line-height:1.9" contenteditable="false">原型为一头有圆盘的杆棍，映锋以晶体附着后在圆盘处生长出尖锐的簇状晶体。高密度晶体使其达到常人无法挥动的重量，既可造成钝器伤，亦可以晶体造成锐器伤。</div>
+    </div>
+  </div>
+
+  <!-- PHASE 03 生绘 -->
+  <div class="phase-panel p03" id="pp2">
+    <div class="phase-block span2">
+      <div class="pb-label">// PHASE · 03 · 生绘</div>
+      <div class="pb-title" contenteditable="false">生绘</div>
+      <div class="pb-quote" contenteditable="false">乌托邦的生活，在此沉沦，此刻映锋的初愿就在不远处，仿佛伸手就可触达。迈开步，伸出手，眼中倒映着消散的色彩，回过神却发现手中的花却在逐渐枯萎。</div>
+      <div class="pb-story" contenteditable="false">在经历了来自月都研究者的实验折磨后，沉沦于桃源境。再次睁眼时他已是牛亚人，失去了部分记忆，却在这如梦的世外桃源中找到了宁静。他知晓了如何与"灵魂"交流。</div>
+      <div class="img-slot" id="img-p2" onclick="triggerImgUpload('img-p2')" style="margin-top:1rem;height:160px"><span>+ 插入此阶段图片</span></div>
+      <button class="img-upload-btn" onclick="triggerImgUpload('img-p2')">插入图片</button>
+      <input type="file" id="file-img-p2" accept="image/*" style="display:none" onchange="handleImg(this,'img-p2')">
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 基本数据</div>
+      <div class="stat-row"><span class="stat-label">HEIGHT</span><span class="stat-val">418 cm</span></div>
+      <div class="stat-row"><span class="stat-label">WEIGHT</span><span class="stat-val">5.88 t</span></div>
+      <div class="stat-row"><span class="stat-label">RACE</span><span class="stat-val">术零 / 牛亚人</span></div>
+      <div class="stat-row"><span class="stat-label">IDENTITY</span><span class="stat-val">画家 · 桃源境居民</span></div>
+      <div class="stat-row"><span class="stat-label">SKILL</span><span class="stat-val">抹彩</span></div>
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 法术 · 结梦境</div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">梦境涂彩</span> — 挥动画笔将色彩泼洒在空间中，化作朦胧使人无忧沉眠</div></div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">记忆晶体</span> — 从朦胧中析出精神与记忆的晶体，复制备份，存于梦匣</div></div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">命运涂改</span> — 色彩涂抹区域内，一切因果导向对映锋最有利的方向</div></div>
+    </div>
+    <div class="phase-block span2">
+      <div class="pb-label">// 武器</div>
+      <div class="weapon-name">染暮绘笔</div>
+      <div style="font-size:.83rem;color:var(--t2);line-height:1.9" contenteditable="false">原型为一支普通但深受映锋喜爱的画笔。需要时以晶体完全覆盖笔身，催生分叉交织如花蔓枝桠的结构。画笔所过之处，色彩幻化成真实的力量。</div>
+    </div>
+  </div>
+
+  <!-- PHASE 04 死献 -->
+  <div class="phase-panel p04" id="pp3">
+    <div class="phase-block span2">
+      <div class="pb-label">// PHASE · 04 · 死献</div>
+      <div class="pb-title" contenteditable="false">死献</div>
+      <div class="pb-quote" contenteditable="false">不断地杀戮，任由所有的情绪裹挟着自己，尸块在飞溅，鲜血在浇灌，哀嚎给予养分，一株株殷红的虞美人正不断生长，绽放……</div>
+      <div class="pb-story" contenteditable="false">意识到这个世界无可救药后，映锋来到月都，利用可怖的法术秘密挟持数名顶尖研究者，研究出了这套战服。他不再压抑自我，为所有的所有带去死亡。他解析了如何与"生命"厮杀。</div>
+      <div class="img-slot" id="img-p3" onclick="triggerImgUpload('img-p3')" style="margin-top:1rem;height:160px"><span>+ 插入此阶段图片</span></div>
+      <button class="img-upload-btn" onclick="triggerImgUpload('img-p3')">插入图片</button>
+      <input type="file" id="file-img-p3" accept="image/*" style="display:none" onchange="handleImg(this,'img-p3')">
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 基本数据</div>
+      <div class="stat-row"><span class="stat-label">HEIGHT</span><span class="stat-val">198 cm</span></div>
+      <div class="stat-row"><span class="stat-label">WEIGHT</span><span class="stat-val">347 kg</span></div>
+      <div class="stat-row"><span class="stat-label">RACE</span><span class="stat-val">术零（强化）</span></div>
+      <div class="stat-row"><span class="stat-label">IDENTITY</span><span class="stat-val">刺客</span></div>
+      <div class="stat-row"><span class="stat-label">SKILL</span><span class="stat-val">猩红裂殇</span></div>
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 法术 · 文明的熵化</div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">生命侵蚀</span> — 晶体可瞬间或缓慢侵蚀生命肉体，带去无尽痛苦</div></div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">生命结晶</span> — 甚至可将"生命"这一概念进行结晶，将其碾碎成齑粉</div></div>
+    </div>
+    <div class="phase-block span2">
+      <div class="pb-label">// 武器</div>
+      <div class="weapon-name">裂齿臂刃</div>
+      <div style="font-size:.83rem;color:var(--t2);line-height:1.9" contenteditable="false">钢制螳螂刀臂刃附着锋利结晶利片，编入高精度指令使晶体具不稳定性，攻击时破碎在敌人体内，数分钟后自我引爆。亦可主动分离微小晶体碎片远程抛射击杀。</div>
+    </div>
+  </div>
+
+  <!-- PHASE 05 孤落 -->
+  <div class="phase-panel p05" id="pp4">
+    <div class="phase-block span2">
+      <div class="pb-label">// PHASE · 05 · 孤落</div>
+      <div class="pb-title" contenteditable="false">孤落</div>
+      <div class="pb-quote" contenteditable="false">星空是如此广阔，一切都显得如此渺小，而此刻在祂的脚边一株小小的欧石楠正独自摇曳着。</div>
+      <div class="pb-story" contenteditable="false">世界已然被重塑，知晓灾难的信息与大部分奇迹、科技奇点均被抹除。术零与人类的人口总数趋于平衡。祂将在星幕之下漫长地等待，观察，确保设想的未来顺利抵达。祂通晓了如何与"自我"拥抱——但这不过是一个可恨的罪人。</div>
+      <div class="img-slot" id="img-p4" onclick="triggerImgUpload('img-p4')" style="margin-top:1rem;height:160px"><span>+ 插入此阶段图片</span></div>
+      <button class="img-upload-btn" onclick="triggerImgUpload('img-p4')">插入图片</button>
+      <input type="file" id="file-img-p4" accept="image/*" style="display:none" onchange="handleImg(this,'img-p4')">
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 基本数据</div>
+      <div class="stat-row"><span class="stat-label">HEIGHT</span><span class="stat-val">198 cm</span></div>
+      <div class="stat-row"><span class="stat-label">WEIGHT</span><span class="stat-val">347 kg</span></div>
+      <div class="stat-row"><span class="stat-label">RACE</span><span class="stat-val">术零 / 祂</span></div>
+      <div class="stat-row"><span class="stat-label">IDENTITY</span><span class="stat-val">世界守望者</span></div>
+      <div class="stat-row"><span class="stat-label">SKILL</span><span class="stat-val">逆茂·孤冉·谐失·生灭·死诞·终穹</span></div>
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 法术 · 擢升明晶</div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">神明之力</span> — 成为了神明一般强大的存在，但实质只是一个可恨的罪人</div></div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">星际施暴</span> — 法术已将祂侵蚀，换取来的是对星球乃至宇宙的施暴能力</div></div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">永恒囚禁</span> — 生命、灵魂、精神将永远成为祂的狱友，在孤独的背面近乎无尽地懊悔直至疯狂</div></div>
+    </div>
+    <div class="phase-block span2">
+      <div class="pb-label">// 武器</div>
+      <div class="weapon-name">几何</div>
+      <div style="font-size:.83rem;color:var(--t2);line-height:1.9" contenteditable="false">取自自我崩落而下的晶体碎屑，可感受到自己的肉体被拼装为任意想要的武器。每每击中目标，总能感受到对方的温热血液顺着来自自己身体的碎屑流淌而下——悲伤，愤怒，惋惜，憎恶。但祂只是叹息，再叹息。</div>
+    </div>
+  </div>
+
+  <!-- PHASE 06 终途 -->
+  <div class="phase-panel p06" id="pp5">
+    <div class="phase-block span2">
+      <div class="pb-label">// PHASE · 06 · 终途</div>
+      <div class="pb-title" contenteditable="false">终途</div>
+      <div class="pb-quote" contenteditable="false">繁星划过夜空，而一颗将熄的星星从天幕落下……紫鸢尾。</div>
+      <div class="pb-story" contenteditable="false">继承了之前所有"映锋"能力的结晶，无比强大，无比孤独。祂所期盼的未来终于到来，而祂也已残破不堪。祂想要完成初愿，祂渴求■■■■■■。祂是法术的主人，但祂……不知道，祂是谁。</div>
+      <div class="img-slot" id="img-p5" onclick="triggerImgUpload('img-p5')" style="margin-top:1rem;height:160px"><span>+ 插入此阶段图片</span></div>
+      <button class="img-upload-btn" onclick="triggerImgUpload('img-p5')">插入图片</button>
+      <input type="file" id="file-img-p5" accept="image/*" style="display:none" onchange="handleImg(this,'img-p5')">
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 基本数据</div>
+      <div class="stat-row"><span class="stat-label">HEIGHT</span><span class="stat-val">198 cm</span></div>
+      <div class="stat-row"><span class="stat-label">WEIGHT</span><span class="stat-val">347 kg</span></div>
+      <div class="stat-row"><span class="stat-label">RACE</span><span class="stat-val">术零 / 祂</span></div>
+      <div class="stat-row"><span class="stat-label">IDENTITY</span><span class="stat-val">■■■■■■</span></div>
+      <div class="stat-row"><span class="stat-label">STATUS</span><span class="stat-val">残破 · 将熄</span></div>
+    </div>
+    <div class="phase-block">
+      <div class="pb-label">// 法术 · 陨落碎星</div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">终极继承</span> — 集所有阶段能力于一身</div></div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">流动能量</span> — 法术的流动能量在眼前舞动，轻触弦，大地上将诞生一座满载哀嚎的玩具</div></div>
+      <div class="ability-item"><div class="ability-dot"></div><div class="ability-text"><span class="ability-name">自我迷失</span> — 祂不知道，祂是谁</div></div>
+    </div>
+    <div class="phase-block span2">
+      <div class="pb-label">// 武器</div>
+      <div class="weapon-name">再会</div>
+      <div style="font-size:.83rem;color:var(--t2);line-height:1.9;text-align:center;padding:1rem 0;letter-spacing:.3em">■■■■■■■■■■■■■■■■■■■■</div>
+    </div>
+  </div>
+</section>
+
+<div class="h-rule"></div>
+
+<!-- TIMELINE -->
+<section class="sec" id="timeline">
+  <div class="sec-head">
+    <div class="sec-num">// 05</div>
+    <div>
+      <div class="sec-title">历史年表</div>
+      <div class="sec-sub">CHRONO · ARCHIVE</div>
+    </div>
+  </div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2158</div><div class="tl-text" contenteditable="false">奇迹·灰色国度爆发，摧毁国家隆卡索。一个月内造成约五千万人类与全境动植物死亡。全世界进入紧急状态。</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2162</div><div class="tl-text" contenteditable="false">世界大多数国家定义此次事件为星球未探明灾难，对隆卡索进行全境封锁，开始研究灾害起因。</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2167</div><div class="tl-text" contenteditable="false">各国观测得出结论：灾害表现平稳，无扩张现象。确认隆卡索灭国，将其归为危险无人区。</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2170</div><div class="tl-text" contenteditable="false">灾害正式命名"奇迹·灰色国度"。月都与艾克斯联合提案：探寻引发奇迹的原因，解析运作原理。</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2377</div><div class="tl-text" contenteditable="false">奇迹·未知裂缝出现，术零踏入后消失。此后无数探险者与科研人员亦消失其中，最终被放弃研究。</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2656</div><div class="tl-text" contenteditable="false">奇迹·胧紫沉眠之茧出现于庇斯国西北部，庇斯以此为核威慑在强国夹缝中求生。</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2938</div><div class="tl-text" contenteditable="false">奇迹·永不停歇的分裂在穆尼洛索爆发，该国灭亡。月都建立封锁穹顶，灿尚担任监视第一道防线。</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">3346</div><div class="tl-text" contenteditable="false">奇迹·空无出现。有智慧生物踏入即逐渐丧失对现实的感知与欲望，最终沦为空壳。</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">3480</div><div class="tl-text" contenteditable="false">奇迹·铁幕出现，位于空无附近，引发者身份不明。踏入者将陷入无穷自我拷问。</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">4040</div><div class="tl-text" contenteditable="false">奇迹·树出现。金色果实可治百病，但食用者一年后化为人形树木，继续蔓延。</div></div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">[ × ]</button>
+    <div class="modal-name" id="mName"></div>
+    <div class="modal-gov" id="mGov"></div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+
+<!-- EDIT TOOLBAR -->
+<div class="edit-toolbar" id="editToolbar">
+  <span class="et-status" id="etStatus">编辑模式已开启</span>
+  <button class="et-btn et-save" onclick="saveData()">[ 保存 ]</button>
+  <button class="et-btn" onclick="loadData()">[ 还原 ]</button>
+  <button class="et-btn" onclick="toggleEdit()">[ 关闭编辑 ]</button>
+</div>
+
+
+<!-- 手机底部导航 -->
+<nav class="mob-nav">
+  <a href="#world"><div class="mob-nav-icon">◈</div>世界</a>
+  <a href="#miracles"><div class="mob-nav-icon">◉</div>奇迹</a>
+  <a href="#nations"><div class="mob-nav-icon">◫</div>国度</a>
+  <a href="#yingfeng"><div class="mob-nav-icon">◆</div>映锋</a>
+  <a href="#timeline"><div class="mob-nav-icon">◎</div>年表</a>
+</nav>
+
+<footer>
+  <div class="ft-id">// VAL-KONI · WORLD ARCHIVE · YF-UNIT DATABASE</div>
+  <div class="ft-copy">原创世界观 · 版权归原作者所有</div>
+</footer>
+
+<script>
+/* ── PHASE COLORS ─────────────────────────────── */
+const phaseColors=['#8B5E3C','#3A7D44','#E8A8D8','#8B0000','#C9A84C','#7B5EA7'];
+let currentPhase=0;
+
+function switchPhase(i){
+  document.querySelectorAll('.phase-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.phase-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('pp'+i).classList.add('active');
+  document.querySelectorAll('.phase-tab')[i].classList.add('active');
+  currentPhase=i;
+  // set CSS var on active panel
+  const c=phaseColors[i];
+  document.getElementById('pp'+i).style.setProperty('--phase',c);
+  document.getElementById('pp'+i).style.setProperty('--phase-bg',hexToRgba(c,.08));
+}
+
+function hexToRgba(hex,a){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+// init first phase
+document.getElementById('pp0').style.setProperty('--phase',phaseColors[0]);
+document.getElementById('pp0').style.setProperty('--phase-bg',hexToRgba(phaseColors[0],.08));
+
+/* ── NATION MODAL DATA ─────────────────────────── */
+const nations={
+  moon:{name:'月都',gov:'技术精英专政 · 科研寡头共和国',body:`<p>拥有瓦尔空伊星球上最尖端科技的国家，几千年来都在研究着术零的尸体与奇迹，只为得知"法术"为何物——可否被结构？可否被复现？可否被制造？</p><div class="modal-label">核心口号</div><div class="modal-val">"真理优先于民意，效率优先于情感"</div><div class="modal-label">最高权力</div><div class="modal-val">真理议会 — 由学术成就与科研贡献自动入选，以逻辑推演+数据投票决策</div><div class="modal-label">社会阶级</div><div class="modal-val">首席研究者 → 高级科研人员 → 技术工人 → 无技术贡献者 → 被实验体</div><div class="modal-label">特殊事项</div><div class="modal-val">唯一曾成功登陆卫星·内斯尔的国家，对诸多细节讳莫如深</div>`},
+  war:{name:'索里克兰',gov:'军武神权共和 · 最高统帅独裁制',body:`<p>最好战的国家，拥有最精锐的部队。国家的宗旨就是哪里有战争哪里就有他们。</p><div class="modal-label">最高统治者</div><div class="modal-val">战争大统领 — 由战功与统帅能力决定，前任战死或被更强者挑战取代</div><div class="modal-label">核心价值观</div><div class="modal-val">勇气为荣，安逸为耻；胜利为理，和平为敌</div><div class="modal-label">经济模式</div><div class="modal-val">以战养战 — 财富来源于掠夺、雇佣兵、参战分红、战败国赔款</div><div class="modal-label">外交逻辑</div><div class="modal-val">"要不要我们参战帮你打？不打，那我们就连你一起打。"</div>`},
+  gold:{name:'艾克斯',gov:'金融霸权共和 · 资本寡头统治',body:`<p>世界上最富裕的国家，说是金钱构成的国家也不为过。每次经济危机都以近乎无法想象的手段化解，坊间流传其国主是掌握命运之力的不老术零。</p><div class="modal-label">最高权力</div><div class="modal-val">金庭议会 — 由最顶级的金融、银行、贸易、资源垄断家族组成</div><div class="modal-label">秘密核心</div><div class="modal-val">均衡院 — 负责危机时启动极端手段：债务重组、货币替换、全球剪羊毛</div><div class="modal-label">全民共识</div><div class="modal-val">金钱不是工具，是秩序本身</div>`},
+  nature:{name:'源木',gov:'自然神权 · 无国家体制的宗教部落联盟',body:`<p>拒绝知识与文明，信仰自然，相信融入生态循环才能获得圆满。</p><div class="modal-label">真正的统治者</div><div class="modal-val">森林本身 · 自然之灵</div><div class="modal-label">管理者</div><div class="modal-val">灵语者（大祭司）— 能与草木生灵沟通，传达自然意志</div><div class="modal-label">灾难</div><div class="modal-val">一位术零追求知识背叛自然，毁灭了整片森林生态。源木被迫成为流浪的自然宗教共同体，寻找未被污染的净土</div>`},
+  fuka:{name:'夫卡音涅',gov:'温和中立神权议会制 · 奇迹守护共和国',body:`<p>实力不强的小国，但境内拥有"奇迹·未知裂缝"，使其他国家不得不寻求与该国建立友好关系。</p><div class="modal-label">核心资产</div><div class="modal-val">奇迹·未知裂缝 — 令大国不敢入侵的战略威慑</div><div class="modal-label">国家定位</div><div class="modal-val">永久中立国 — 不参战、不结盟、不宣战</div><div class="modal-label">生存逻辑</div><div class="modal-val">一旦入侵等于破坏奇迹，等于与所有想研究奇迹的国家为敌</div>`},
+  lieyang:{name:'烈阳',gov:'国际共管 · 军事傀儡体制',body:`<p>多个国家共同决定建立的猎杀组织，唯一目的是第一时间抹杀诞生的术零。目前是第九代烈阳。</p><div class="modal-label">最高控制层</div><div class="modal-val">诸国监盟 — 拥有解散权与重建权</div><div class="modal-label">铁律</div><div class="modal-val">一旦发现烈阳私用兵力或图谋不轨，全球立刻群起灭国，重建新一代</div><div class="modal-label">国家本质</div><div class="modal-val">没有政治理想，没有领土野心。它只为"抹杀术零"而存在</div>`},
+  mihe:{name:'弥藿',gov:'君主立宪制 · 记忆结界庇护国',body:`<p>表面是完全正常的君主立宪国，实则被前代术零国主的永久结界笼罩。世界上唯一一个术零可以光明正大生活的国度。</p><div class="modal-label">真相</div><div class="modal-val">全域认知结界 — 所有人被统一认知为"术零=正常人，法术=普通现象"</div><div class="modal-label">结界规则</div><div class="modal-val">外人进入→认知被改写；外人离开→记忆恢复，但永远记住"弥藿没有术零"</div><div class="modal-label">起源</div><div class="modal-val">前代国主成为术零后，在烈阳即将杀死他时施放了这个结界，唯一愿望是保护国家。他死后结界依然存在</div>`},
+  valune:{name:'瓦伦尔',gov:'奇迹督军制 · 扩张型强权',body:`<p>奇迹·空无与奇迹·铁幕的诞生地，均位于西部。与月都深度合作，同时向极度危险的渊穹派驻研究人员。</p><div class="modal-label">与月都关系</div><div class="modal-val">开放西部两大奇迹换取尖端科技、军工、基建、工业体系</div><div class="modal-label">远征军部</div><div class="modal-val">主管渊穹探索，每年大量人员死亡，但采集到的信息能反过来制衡月都</div>`},
+  bis:{name:'庇斯',gov:'强力君主集权 · 奇迹威慑国',body:`<p>紧邻月都与艾克斯的国家，面临极大外交军备压力，凭借"奇迹·胧紫沉眠之茧"在两强夹缝中生存。</p><div class="modal-label">核心底牌</div><div class="modal-val">奇迹·胧紫沉眠之茧 — 同归于尽级防御威慑</div><div class="modal-label">外交话术</div><div class="modal-val">"你们敢动我，我就激活茧，让这片区域变成谁也拿不到的死地。"</div><div class="modal-label">治国风格</div><div class="modal-val">极端现实、不讲情怀、只讲利益与生存</div>`},
+  rosbi:{name:'罗斯比棱',gov:'大陆群岛联邦 · 国际共管枢纽国',body:`<p>一半国土是群岛，一半是大陆，是世界中心的贸易转交节点，同时担任监视第九烈阳的职责。</p><div class="modal-label">最高权力</div><div class="modal-val">诸国合议厅 — 本国政府+各大国观察员共同议事</div><div class="modal-label">生存逻辑</div><div class="modal-val">靠"地理位置+奇迹+贸易"三重霸权保命，不能太强也不能太弱</div>`},
+  zanshang:{name:'灿尚',gov:'温和共和制 · 理念至上的理想国',body:`<p>全世界唯一支持术零权益的国家，以和平手段解决一切，因此引来世界绝大部分国家的厌恶。</p><div class="modal-label">国家宗旨</div><div class="modal-val">以和平解决一切，保护所有被世界抛弃的存在</div><div class="modal-label">残酷真相</div><div class="modal-val">"随便你怎么喊和平，等大灾难来的时候，你第一个上去死就行。"</div>`},
+  sahuang:{name:'萨荒',gov:'纯暴力独裁 · 丛林法则神权',body:`<p>弱小者将被强制驱逐或处死的国家，比索里克兰更野蛮、更极端、更无人性。</p><div class="modal-label">蛮骨律</div><div class="modal-val">无力劳作者处死或献祭；残疾衰老者强制驱逐；战败者沦为耗材；不服从者当场格杀</div><div class="modal-label">文化核心</div><div class="modal-val">变强，否则死</div>`},
+  beiyuji:{name:'悲雨季',gov:'无国籍 · 奇迹废弃地',body:`<p>原名隆卡索，因术零引发奇迹·灰色国度而灭国。现为无政府废弃地。</p><div class="modal-label">现状</div><div class="modal-val">无政府、无人民，只有零散村落与月都科研站驻扎于边缘地带</div><div class="modal-label">历史意义</div><div class="modal-val">术零=灭国级灾难的活教材，各国的天然实验场</div>`},
+  muniluosuo:{name:'穆尼洛索',gov:'已灭国 · 巨型囚笼遗址',body:`<p>奇迹·永不停歇的分裂的发生地，全境被月都科技穹顶封锁。</p><div class="modal-label">封锁层</div><div class="modal-val">月都建造并维护的巨型科技围墙与隔离穹顶</div><div class="modal-label">监视层</div><div class="modal-val">灿尚负责第一道监视与预警，也是首当其冲的牺牲品</div>`},
+  taoyuan:{name:'桃源境',gov:'奇点·万物梦构筑的精神世界',body:`<p>不存在于现实的国度，完美乌托邦同时也是完美囚笼。</p><div class="modal-label">时间规则</div><div class="modal-val">现实一天 = 桃源境一年</div><div class="modal-label">三条铁律</div><div class="modal-val">维持幸福；时间流速固定；现实终端一毁全境强制崩溃</div><div class="modal-label">映锋与桃源境</div><div class="modal-val">映锋在此化为牛亚人，逐渐沉沦。每十二年举行特殊祭祀仪式</div>`}
+};
+
+function openModal(key){
+  const d=nations[key];if(!d)return;
+  document.getElementById('mName').textContent=d.name;
+  document.getElementById('mGov').textContent='// '+d.gov;
+  document.getElementById('mBody').innerHTML=d.body;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(e){if(e.target===document.getElementById('modalOverlay'))document.getElementById('modalOverlay').classList.remove('open')}
+
+/* ── EDIT MODE ─────────────────────────────────── */
+let editMode=false;
+function toggleEdit(){
+  editMode=!editMode;
+  document.body.classList.toggle('edit-mode',editMode);
+  document.getElementById('editToggle').classList.toggle('active',editMode);
+  document.getElementById('editToggle').textContent=editMode?'[ EDITING ]':'[ EDIT ]';
+  document.querySelectorAll('[contenteditable]').forEach(el=>{
+    el.contentEditable=editMode?'true':'false';
+  });
+  if(editMode)loadData();
+}
+
+/* ── IMAGE UPLOAD ──────────────────────────────── */
+function triggerImgUpload(slotId){
+  if(!editMode)return;
+  document.getElementById('file-'+slotId).click();
+}
+function handleImg(input,slotId){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const slot=document.getElementById(slotId);
+    slot.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">`;
+    slot.style.height='auto';
+    // save to localStorage
+    try{localStorage.setItem('img_'+slotId,e.target.result);}catch(err){
+      document.getElementById('etStatus').textContent='图片过大，建议压缩后上传';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ── SAVE / LOAD ───────────────────────────────── */
+function saveData(){
+  const data={};
+  document.querySelectorAll('[contenteditable]').forEach((el,i)=>{
+    data['ce_'+i]=el.innerHTML;
+  });
+  localStorage.setItem('valkoni_data',JSON.stringify(data));
+  document.getElementById('etStatus').textContent='已保存 ✓';
+  setTimeout(()=>document.getElementById('etStatus').textContent='编辑模式已开启',2000);
+}
+function loadData(){
+  const raw=localStorage.getItem('valkoni_data');
+  if(!raw)return;
+  const data=JSON.parse(raw);
+  document.querySelectorAll('[contenteditable]').forEach((el,i)=>{
+    if(data['ce_'+i]!==undefined)el.innerHTML=data['ce_'+i];
+  });
+  // load images
+  ['world','miracle','phase-global','p0','p1','p2','p3','p4','p5'].forEach(id=>{
+    const imgData=localStorage.getItem('img_img-'+id);
+    if(imgData){
+      const slot=document.getElementById('img-'+id);
+      if(slot){slot.innerHTML=`<img src="${imgData}" style="width:100%;height:100%;object-fit:cover">`;slot.style.height='auto';}
+    }
+  });
+}
+// auto-load on page open
+window.addEventListener('DOMContentLoaded',()=>{loadData();});
+
+/* ── SMOOTH SCROLL ─────────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+</script>
+</body>
+</html>
